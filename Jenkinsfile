@@ -37,7 +37,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack build --no-docker \
+          stack --system-ghc build --no-docker \
             || echo "Build failed"
         """
       }
