@@ -33,15 +33,6 @@ podTemplate(
       }
     }
 
-    stage('chown') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
-          chown -hR root .
-        """
-      }
-    }
-
     stage('stack') {
       container('stack-build') {
         sh """
