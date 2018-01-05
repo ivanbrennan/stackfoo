@@ -7,7 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-build:0.0.18',
+      image: 'ivanbrennan/stack-docker-build:0.0.1',
       alwaysPullImage: true,
       ttyEnabled: true,
       command: 'cat'
@@ -46,7 +46,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack build \
+          stack build --no-docker \
             || echo "Build failed"
         """
       }
