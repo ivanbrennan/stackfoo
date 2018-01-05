@@ -1,0 +1,35 @@
+name:                stackfoo
+version:             0.1.0.0
+homepage:            https://github.com/ivanbrennan/stackfoo#readme
+author:              Ivan Brennan
+maintainer:          ibrennan@sumall.com
+copyright:           SumAll, Inc
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+  build-depends:       base >= 4.9 && < 4.10
+  default-language:    Haskell2010
+
+executable stackfoo
+  hs-source-dirs:      app
+  main-is:             main.hs
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N -Wincomplete-uni-patterns -Wmissing-import-lists
+  build-depends:       base
+                     , stackfoo
+  default-language:    Haskell2010
+
+test-suite stackfoo-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N -Wincomplete-uni-patterns
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/ivanbrennan/stackfoo

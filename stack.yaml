@@ -1,0 +1,8 @@
+resolver: lts-9.9
+packages:
+- .
+flags: {}
+extra-package-dbs: []
+docker:
+  auto-pull: true
+  repo: fpco/stack-build
