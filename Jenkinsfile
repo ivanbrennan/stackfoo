@@ -7,7 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-docker-build:0.0.1',
+      image: 'ivanbrennan/stack-docker-build:0.0.2',
       alwaysPullImage: true,
       ttyEnabled: true,
       command: 'cat'
