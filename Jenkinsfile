@@ -7,7 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-build:0.1.0',
+      image: 'ivanbrennan/stack-build:0.1.1',
       ttyEnabled: true,
       command: 'cat'
     ),
@@ -42,9 +42,6 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          whoami
-          id -u
-          ls -ld /home/jenkins
           stack --system-ghc build --no-docker \
             || echo "Build failed"
         """
