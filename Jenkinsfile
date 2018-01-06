@@ -38,22 +38,11 @@ podTemplate(
       }
     }
 
-    stage('inspect') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
-          whoami
-          id -u
-          ls -lA
-        """
-      }
-    }
-
     stage('stack') {
       container('stack-build') {
         sh """
           #!/bin/bash
-          echo stack --system-ghc build --no-docker \
+          stack --system-ghc build --no-docker \
             || echo "Build failed"
         """
       }
