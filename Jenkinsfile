@@ -42,6 +42,9 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
+          whoami
+          id -u
+          ls -ld /home/jenkins
           stack --system-ghc build --no-docker \
             || echo "Build failed"
         """
