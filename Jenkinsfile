@@ -7,8 +7,13 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-docker-build:0.0.2',
-      alwaysPullImage: true,
+      image: 'ivanbrennan/stack-build:0.1.0',
+      ttyEnabled: true,
+      command: 'cat'
+    ),
+    containerTemplate(
+      name: 'docker',
+      image: 'docker:17.12',
       ttyEnabled: true,
       command: 'cat'
     )
@@ -21,7 +26,7 @@ podTemplate(
   ]
 ) {
   node('haskell-microservice') {
-    stage('clone repo') {
+    stage('clone') {
       container('stack-build') {
         git(
           branch: 'jenkins',
@@ -33,27 +38,32 @@ podTemplate(
       }
     }
 
-    stage('stack') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
-          stack --system-ghc build --no-docker \
-            || echo "Build failed"
-        """
-      }
-    }
-
     stage('inspect') {
       container('stack-build') {
         sh """
           #!/bin/bash
           whoami
-
           id -u
+          ls -lA
+        """
+      }
+    }
 
-          ls -l .
+    stage('stack') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
+          echo stack --system-ghc build --no-docker \
+            || echo "Build failed"
+        """
+      }
+    }
 
-          ls -ld ~
+    stage('image') {
+      container('docker') {
+        sh """
+          #!/bin/bash
+          echo build docker image
         """
       }
     }
