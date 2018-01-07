@@ -58,6 +58,16 @@ podTemplate(
       }
     }
 
+    stage('stack test') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
+          stack --system-ghc test --no-docker stackfoo \
+            || echo "Test failed"
+        """
+      }
+    }
+
     stage('image') {
       container('docker') {
         sh """
