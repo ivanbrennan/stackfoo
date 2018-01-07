@@ -38,12 +38,22 @@ podTemplate(
       }
     }
 
-    stage('stack') {
+    stage('stack build') {
       container('stack-build') {
         sh """
           #!/bin/bash
           stack --system-ghc build --no-docker \
             || echo "Build failed"
+        """
+      }
+    }
+
+    stage('stack exec') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
+          stack --system-ghc exec --no-docker stackfoo \
+            || echo "Exec failed"
         """
       }
     }
