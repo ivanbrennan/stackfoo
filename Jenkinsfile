@@ -29,7 +29,7 @@ podTemplate(
     stage('clone') {
       container('stack-build') {
         git(
-          branch: 'jenkins',
+          branch: 'master',
           changelog: false,
           credentialsId: 'jenkins_ssh_key',
           poll: false,
