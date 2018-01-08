@@ -7,13 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-build:0.1.1',
-      ttyEnabled: true,
-      command: 'cat'
-    ),
-    containerTemplate(
-      name: 'docker',
-      image: 'docker:17.12',
+      image: 'ivanbrennan/stack-build:0.1.3',
       ttyEnabled: true,
       command: 'cat'
     )
@@ -72,7 +66,14 @@ podTemplate(
       container('docker') {
         sh """
           #!/bin/bash
-          echo build docker image
+          INSTALL_ROOT=$(stack --system-ghc --no-docker path --local-install-root | sed "s:$(pwd)/::g")
+          echo \$INSTALL_ROOT
+
+          # get_deps \${INSTALL_ROOT}
+
+          # IMAGENAME="docker.sumall.net/sumall/\${BINNAME}" && \
+          # /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+          #     --build-arg=local_install_root=\${INSTALL_ROOT} . && \
         """
       }
     }
