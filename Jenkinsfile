@@ -51,7 +51,7 @@ podTemplate(
     }
 
     stage('image') {
-      container('docker') {
+      container('stack-build') {
         sh """
           #!/bin/bash
           INSTALL_ROOT=\$( cat local_install_root )
