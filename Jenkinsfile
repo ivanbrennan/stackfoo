@@ -10,6 +10,12 @@ podTemplate(
       image: 'ivanbrennan/stack-build:0.1.3',
       ttyEnabled: true,
       command: 'cat'
+    ),
+    containerTemplate(
+      name: 'docker',
+      image: 'docker:17.12',
+      ttyEnabled: true,
+      command: 'cat'
     )
   ],
   volumes: [
@@ -51,7 +57,7 @@ podTemplate(
     }
 
     stage('image') {
-      container('stack-build') {
+      container('docker') {
         sh """
           #!/bin/bash
           INSTALL_ROOT=\$( cat local_install_root )
