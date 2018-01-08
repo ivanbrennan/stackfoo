@@ -38,26 +38,14 @@ podTemplate(
           #!/bin/bash
           stack --system-ghc build --no-docker \
             || echo "Build failed"
-        """
-      }
-    }
-
-    stage('stack exec') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
           stack --system-ghc exec --no-docker stackfoo \
             || echo "Exec failed"
-        """
-      }
-    }
-
-    stage('stack test') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
           stack --system-ghc test --no-docker stackfoo \
             || echo "Test failed"
+
+          stack --system-ghc --no-docker path --local-install-root \
+            | sed "s:\$(pwd)/::g" \
+            > local_install_root
         """
       }
     }
@@ -66,14 +54,21 @@ podTemplate(
       container('docker') {
         sh """
           #!/bin/bash
-          INSTALL_ROOT=$(stack --system-ghc --no-docker path --local-install-root | sed "s:$(pwd)/::g")
-          echo \$INSTALL_ROOT
+          INSTALL_ROOT=\$( cat local_install_root )
+          BINNAME=stackfoo
+          IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}"
+          VERSION=\$( grep -i "^version:" *.cabal | awk '{print \$2}' )
+
+          /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+              --build-arg=local_install_root=\${INSTALL_ROOT} . &&
+          /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
 
           # get_deps \${INSTALL_ROOT}
 
-          # IMAGENAME="docker.sumall.net/sumall/\${BINNAME}" && \
+          # IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}" && \
           # /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
           #     --build-arg=local_install_root=\${INSTALL_ROOT} . && \
+          # /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
         """
       }
     }
