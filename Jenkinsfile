@@ -65,16 +65,16 @@ podTemplate(
           IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}"
           VERSION=\$( grep -i "^version:" *.cabal | awk '{print \$2}' )
 
-          /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+          /usr/local/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
               --build-arg=local_install_root=\${INSTALL_ROOT} . &&
-          /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
+          /usr/local/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
 
           # get_deps \${INSTALL_ROOT}
 
           # IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}" && \
-          # /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+          # /usr/local/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
           #     --build-arg=local_install_root=\${INSTALL_ROOT} . && \
-          # /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
+          # /usr/local/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
         """
       }
     }
