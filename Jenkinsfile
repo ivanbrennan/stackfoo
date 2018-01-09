@@ -36,7 +36,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user --system-ghc build --no-docker \
+          stack --allow-different-user build --no-docker \
             || echo "Build failed"
         """
       }
@@ -46,7 +46,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user --system-ghc exec --no-docker stackfoo \
+          stack --allow-different-user exec --no-docker stackfoo \
             || echo "Exec failed"
         """
       }
@@ -56,7 +56,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user --system-ghc test --no-docker stackfoo \
+          stack --allow-different-user test --no-docker stackfoo \
             || echo "Test failed"
         """
       }
@@ -68,7 +68,6 @@ podTemplate(
           #!/bin/bash
           INSTALL_ROOT=\$( stack \
                            --allow-different-user \
-                           --system-ghc \
                            --no-docker \
                            path \
                            --local-install-root \
