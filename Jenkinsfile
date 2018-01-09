@@ -85,9 +85,8 @@ podTemplate(
           /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
             --build-arg=local_install_root=\${INSTALL_ROOT} . &&
           /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest &&
-          echo "Now we would push to the docker registry..."
-          echo /usr/bin/docker push \${IMAGENAME}-app:\${VERSION} && \
-          echo   /usr/bin/docker push \${IMAGENAME}-app:latest
+          /usr/bin/docker push \${IMAGENAME}-app:\${VERSION} && \
+          /usr/bin/docker push \${IMAGENAME}-app:latest
         """
       }
     }
