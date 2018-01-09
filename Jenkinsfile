@@ -44,11 +44,34 @@ podTemplate(
           #!/bin/bash
           stack --system-ghc build --no-docker \
             || echo "Build failed"
+        """
+      }
+    }
+
+    stage('stack exec') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
           stack --system-ghc exec --no-docker stackfoo \
             || echo "Exec failed"
+        """
+      }
+    }
+
+    stage('stack test') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
           stack --system-ghc test --no-docker stackfoo \
             || echo "Test failed"
+        """
+      }
+    }
 
+    stage('stack path') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
           stack --system-ghc --no-docker path --local-install-root \
             | sed "s:\$(pwd)/::g" \
             > local_install_root
