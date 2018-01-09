@@ -32,22 +32,21 @@ podTemplate(
       }
     }
 
-    stage('stack build') {
+    stage('stack setup') {
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user build --no-docker \
-            || echo "Build failed"
+          stack --allow-different-user --no-docker update
+          stack --allow-different-user --no-docker setup
         """
       }
     }
 
-    stage('stack exec') {
+    stage('stack build') {
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user exec --no-docker stackfoo \
-            || echo "Exec failed"
+          stack --allow-different-user --no-docker build
         """
       }
     }
@@ -56,8 +55,16 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user test --no-docker stackfoo \
-            || echo "Test failed"
+          stack --allow-different-user --no-docker test stackfoo
+        """
+      }
+    }
+
+    stage('stack exec') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
+          stack --allow-different-user --no-docker exec stackfoo
         """
       }
     }
@@ -66,11 +73,8 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          INSTALL_ROOT=\$( stack \
-                           --allow-different-user \
-                           --no-docker \
-                           path \
-                           --local-install-root \
+          INSTALL_ROOT=\$( stack --allow-different-user --no-docker \
+                           path --local-install-root \
                            | sed "s:\$(pwd)/::g" )
           BINNAME=stackfoo
           IMAGENAME="ivanbrennan/\${BINNAME}"
