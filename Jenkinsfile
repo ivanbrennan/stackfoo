@@ -77,7 +77,7 @@ podTemplate(
                            path --local-install-root \
                            | sed "s:\$(pwd)/::g" )
           BINNAME=stackfoo
-          IMAGENAME="ivanbrennan/\${BINNAME}"
+          IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}"
           VERSION=\$( grep -i "^version:" *.cabal | awk '{print \$2}' )
 
           /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
