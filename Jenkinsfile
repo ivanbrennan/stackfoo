@@ -7,13 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'fpco/stack-build:lts-9.21',
-      ttyEnabled: true,
-      command: 'cat'
-    ),
-    containerTemplate(
-      name: 'docker',
-      image: 'docker:17.12',
+      image: 'ivanbrennan/stack-build:0.1.5',
       ttyEnabled: true,
       command: 'cat'
     )
@@ -68,36 +62,31 @@ podTemplate(
       }
     }
 
-    stage('stack path') {
+    stage('image') {
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --allow-different-user --system-ghc --no-docker path --local-install-root \
-            | sed "s:\$(pwd)/::g" \
-            > local_install_root
-        """
-      }
-    }
-
-    stage('image') {
-      container('docker') {
-        sh """
-          #!/bin/bash
-          INSTALL_ROOT=\$( cat local_install_root )
+          INSTALL_ROOT=\$( stack \
+                           --allow-different-user \
+                           --system-ghc \
+                           --no-docker \
+                           path \
+                           --local-install-root \
+                           | sed "s:\$(pwd)/::g" )
           BINNAME=stackfoo
           IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}"
           VERSION=\$( grep -i "^version:" *.cabal | awk '{print \$2}' )
 
-          /usr/local/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+          /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
               --build-arg=local_install_root=\${INSTALL_ROOT} . &&
-          /usr/local/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
+          /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
 
           # get_deps \${INSTALL_ROOT}
 
           # IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}" && \
-          # /usr/local/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
+          # /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
           #     --build-arg=local_install_root=\${INSTALL_ROOT} . && \
-          # /usr/local/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
+          # /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
         """
       }
     }
