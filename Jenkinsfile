@@ -42,6 +42,17 @@ podTemplate(
       }
     }
 
+    stage('stack hlint') {
+      container('stack-build') {
+        sh """
+          #!/bin/bash
+          stack --allow-different-user --no-docker install hlint
+          stack --allow-different-user --no-docker exec hlint -- src
+          stack --allow-different-user --no-docker clean
+        """
+      }
+    }
+
     stage('stack build') {
       container('stack-build') {
         sh """
@@ -56,15 +67,6 @@ podTemplate(
         sh """
           #!/bin/bash
           stack --allow-different-user --no-docker test stackfoo
-        """
-      }
-    }
-
-    stage('stack exec') {
-      container('stack-build') {
-        sh """
-          #!/bin/bash
-          stack --allow-different-user --no-docker exec stackfoo
         """
       }
     }
@@ -85,7 +87,7 @@ podTemplate(
           /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest &&
           echo "Now we would push to the docker registry..."
           echo /usr/bin/docker push \${IMAGENAME}-app:\${VERSION} && \
-            /usr/bin/docker push \${IMAGENAME}-app:latest
+          echo   /usr/bin/docker push \${IMAGENAME}-app:latest
         """
       }
     }
