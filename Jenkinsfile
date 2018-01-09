@@ -7,7 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'ivanbrennan/stack-build:0.1.4',
+      image: 'fpco/stack-build:lts-9.21',
       ttyEnabled: true,
       command: 'cat'
     ),
@@ -42,7 +42,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --system-ghc build --no-docker \
+          stack --allow-different-user --system-ghc build --no-docker \
             || echo "Build failed"
         """
       }
@@ -52,7 +52,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --system-ghc exec --no-docker stackfoo \
+          stack --allow-different-user --system-ghc exec --no-docker stackfoo \
             || echo "Exec failed"
         """
       }
@@ -62,7 +62,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --system-ghc test --no-docker stackfoo \
+          stack --allow-different-user --system-ghc test --no-docker stackfoo \
             || echo "Test failed"
         """
       }
@@ -72,7 +72,7 @@ podTemplate(
       container('stack-build') {
         sh """
           #!/bin/bash
-          stack --system-ghc --no-docker path --local-install-root \
+          stack --allow-different-user --system-ghc --no-docker path --local-install-root \
             | sed "s:\$(pwd)/::g" \
             > local_install_root
         """
