@@ -73,19 +73,14 @@ podTemplate(
                            --local-install-root \
                            | sed "s:\$(pwd)/::g" )
           BINNAME=stackfoo
-          IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}"
+          IMAGENAME="ivanbrennan/\${BINNAME}"
           VERSION=\$( grep -i "^version:" *.cabal | awk '{print \$2}' )
 
           /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
-              --build-arg=local_install_root=\${INSTALL_ROOT} . &&
-          /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
-
-          # get_deps \${INSTALL_ROOT}
-
-          # IMAGENAME="docker.sumall.net/ibrennan/\${BINNAME}" && \
-          # /usr/bin/docker build -t \${IMAGENAME}-app:\${VERSION} \
-          #     --build-arg=local_install_root=\${INSTALL_ROOT} . && \
-          # /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest
+            --build-arg=local_install_root=\${INSTALL_ROOT} . &&
+          /usr/bin/docker tag \${IMAGENAME}-app:\${VERSION} \${IMAGENAME}-app:latest &&
+          /usr/bin/docker push \${IMAGENAME}-app:\${VERSION} &&
+          /usr/bin/docker push \${IMAGENAME}-app:latest
         """
       }
     }
