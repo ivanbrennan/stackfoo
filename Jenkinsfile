@@ -7,7 +7,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'stack-build',
-      image: 'docker.sumall.net/ibrennan/stack-build:0.2.0',
+      image: 'docker.sumall.net/ibrennan/stack-build:0.2.2',
       ttyEnabled: true,
       command: 'cat'
     )
@@ -70,6 +70,12 @@ podTemplate(
         """
       }
     }
+
+    // export tarball="$(stack sdist --ignore-check 2>&1 | tail -n 1 | sed 's/Wrote sdist tarball to //')" &&
+    // export filename="$(basename "$tarball")"
+    // VERSION=$( grep -i "^version:" *.cabal | awk '{print $2}' )
+    // git tag "${VERSION}" &> /dev/null
+    // return $?
 
     stage('image') {
       container('stack-build') {
