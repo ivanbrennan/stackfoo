@@ -1,6 +1,6 @@
 module Main where
 
-import Lib (helloWorld, unused)
+import Lib (helloWorld)
 
 main :: IO ()
 main = helloWorld
